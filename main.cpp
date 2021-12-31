@@ -21,6 +21,13 @@
 
 using namespace GameSolver::Connect4;
 
+#include <sys/time.h>
+unsigned long long getTimeMicrosec() {
+  timeval NOW;
+  gettimeofday(&NOW, NULL);
+  return NOW.tv_sec*1000000LL + NOW.tv_usec;
+}
+
 /**
  * Main function.
  * Reads Connect 4 positions, line by line, from standard input
@@ -64,8 +71,10 @@ int main(int argc, char** argv) {
         for(int i = 0; i < Position::WIDTH; i++) std::cout << " " << scores[i];
       }
       else {
+        unsigned long long start_time = getTimeMicrosec();
         int score = solver.solve(P, weak);
-        std::cout << " " << score;
+        unsigned long long end_time = getTimeMicrosec();
+        std::cout << " " << score << " " << solver.getNodeCount() << " " << (end_time - start_time);
       }
       std::cout << std::endl;
     }
